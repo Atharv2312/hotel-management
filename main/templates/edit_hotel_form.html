@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Hotel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #667eea, #764ba2);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 500px;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      text-align: center;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 32px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .form-group i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      color: #fff;
+      opacity: 0.7;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #ff4b2b, #ff416c);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(255, 65, 108, 0.6);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Edit Your Hotel</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+      <div class="form-group">
+        <i class="fa fa-hotel"></i>
+        <input type="text" name="{{ form.name.name }}" value="{{ form.name.value }}" placeholder="Hotel Name" required>
+        {% if form.name.errors %}<p style="color:red;">{{ form.name.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-map-marker-alt"></i>
+        <input type="text" name="{{ form.location.name }}" value="{{ form.location.value}}" placeholder="Location" required>
+        {% if form.location.errors %}<p style="color:red;">{{ form.location.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-dollar-sign"></i>
+        <input type="number" name="{{ form.price_per_night.name }}" value="{{ form.price_per_night.value }}" placeholder="Price per Night" required>
+        {% if form.price_per_night.errors %}<p style="color:red;">{{ form.price_per_night.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-wifi"></i>
+        <textarea name="{{ form.amenities.name }}" placeholder="Amenities" required>{{ form.amenities.value }}</textarea>
+        {% if form.amenities.errors %}<p style="color:red;">{{ form.amenities.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-door-open"></i>
+        <input type="number" name="{{ form.number_of_rooms.name }}" value="{{ form.number_of_rooms.value}}" placeholder="Number of Rooms" required>
+        {% if form.number_of_rooms.errors %}<p style="color:red;">{{ form.number_of_rooms.errors.0 }}</p>{% endif %}
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-image"></i>
+        <input type="file" name="{{ form.image.name }}">
+        {% if form.image.errors %}<p style="color:red;">{{ form.image.errors.0 }}</p>{% endif %}
+      </div>
+
+      <button type="submit">Update Hotel</button>
+    </form>
+  </div>
+</body>
+</html>

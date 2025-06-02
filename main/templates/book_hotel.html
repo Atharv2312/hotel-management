@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Book Hotel</title>
+  <style>
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(to right, #74ebd5, #9face6);
+      min-height: 100vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 20px;
+    }
+
+    .booking-container {
+      background-color: #ffffff;
+      border-radius: 20px;
+      padding: 40px;
+      width: 100%;
+      max-width: 600px;
+      box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.3s ease, box-shadow 0.3s ease;
+    }
+
+    .booking-container:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 25px 50px rgba(0, 0, 0, 0.2);
+    }
+
+    .booking-header {
+      font-size: 30px;
+      font-weight: 700;
+      color: white;
+      background: linear-gradient(90deg, #6a11cb, #2575fc);
+      padding: 15px;
+      border-radius: 10px;
+      margin-bottom: 30px;
+      text-align: center;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    .booking-form {
+      display: flex;
+      flex-direction: column;
+      gap: 25px;
+    }
+
+    .form-group {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    label {
+      font-weight: 600;
+      color: #2c3e50;
+      margin-bottom: 8px;
+      padding-left: 5px;
+    }
+
+    .form-group input {
+      width: 100%;
+      padding: 14px;
+      font-size: 16px;
+      border: 2px solid #ecf0f1;
+      border-radius: 10px;
+      background-color: #fdfdfd;
+      transition: all 0.3s ease;
+      height: 45px;
+      line-height: 1.5;
+    }
+
+    .form-group input:focus {
+      border-color: #6a11cb;
+      background-color: #fff;
+      outline: none;
+      box-shadow: 0 0 10px rgba(106, 17, 203, 0.2);
+    }
+
+    .form-group p {
+      color: #e74c3c;
+      font-size: 14px;
+      margin-top: 5px;
+    }
+
+    .btn {
+      background: linear-gradient(to right, #ff758c, #ff7eb3);
+      color: white;
+      padding: 15px;
+      border: none;
+      border-radius: 10px;
+      font-size: 16px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      font-weight: 600;
+      letter-spacing: 0.5px;
+    }
+
+    .btn:hover {
+      background: linear-gradient(to right, #e84393, #fd79a8);
+      transform: scale(1.03);
+    }
+
+    .circle {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255, 255, 255, 0.2);
+      z-index: -1;
+    }
+
+    .circle1 {
+      width: 180px;
+      height: 180px;
+      top: -80px;
+      left: -80px;
+    }
+
+    .circle2 {
+      width: 120px;
+      height: 120px;
+      bottom: -60px;
+      right: -60px;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="booking-container">
+    <div class="circle circle1"></div>
+    <div class="circle circle2"></div>
+    
+    <div class="booking-header">
+      Book {{ hotel.name }}
+    </div>
+    
+    <form method="POST" class="booking-form">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <label for="{{ form.no_of_rooms.id_for_label }}">Number of Rooms</label>
+        <input type="number" name="{{ form.no_of_rooms.name }}" value="{{ form.no_of_rooms.value }}" placeholder="Enter number of rooms" required id="{{ form.no_of_rooms.id_for_label }}">
+        {% if form.no_of_rooms.errors %}
+          <p>{{ form.no_of_rooms.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.check_in.id_for_label }}">Check-in Date</label>
+        <input type="date" name="{{ form.check_in.name }}" value="{{ form.check_in.value }}" required id="{{ form.check_in.id_for_label }}">
+        {% if form.check_in.errors %}
+          <p>{{ form.check_in.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <div class="form-group">
+        <label for="{{ form.check_out.id_for_label }}">Check-out Date</label>
+        <input type="date" name="{{ form.check_out.name }}" value="{{ form.check_out.value }}" required id="{{ form.check_out.id_for_label }}">
+        {% if form.check_out.errors %}
+          <p>{{ form.check_out.errors.0 }}</p>
+        {% endif %}
+      </div>
+
+      <button type="submit" class="btn">Confirm Booking</button>
+    </form>
+  </div>
+
+</body>
+</html>

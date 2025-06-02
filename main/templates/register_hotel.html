@@ -1,0 +1,213 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Register Hotel</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    * {
+      box-sizing: border-box;
+    }
+
+    body {
+      margin: 0;
+      padding: 0;
+      font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #1e3c72, #2a5298);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    @keyframes fadeIn {
+      0% { opacity: 0; transform: scale(0.98); }
+      100% { opacity: 1; transform: scale(1); }
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 20px;
+      box-shadow: 0 10px 40px rgba(0, 0, 0, 0.2);
+      padding: 50px 40px;
+      width: 100%;
+      max-width: 500px;
+      backdrop-filter: blur(25px);
+      -webkit-backdrop-filter: blur(25px);
+      text-align: center;
+      animation: slideUp 0.8s ease-out;
+    }
+
+    @keyframes slideUp {
+      0% { transform: translateY(30px); opacity: 0; }
+      100% { transform: translateY(0); opacity: 1; }
+    }
+
+    h1 {
+      color: #fff;
+      font-size: 30px;
+      margin-bottom: 30px;
+    }
+
+    .form-group {
+      position: relative;
+      margin-bottom: 25px;
+      text-align: left;
+    }
+
+    .form-group i {
+      position: absolute;
+      top: 50%;
+      left: 14px;
+      transform: translateY(-50%);
+      color: #fff;
+      opacity: 0.7;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+      width: 100%;
+      padding: 14px 14px 14px 44px;
+      border-radius: 12px;
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.1);
+      color: #fff;
+      font-size: 16px;
+      outline: none;
+      transition: 0.3s ease;
+    }
+
+    .form-group input::placeholder,
+    .form-group textarea::placeholder {
+      color: rgba(255, 255, 255, 0.6);
+    }
+
+    .form-group input:focus,
+    .form-group textarea:focus,
+    .form-group select:focus {
+      border-color: #fff;
+      box-shadow: 0 0 10px rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.2);
+    }
+
+    button {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 12px;
+      background: linear-gradient(135deg, #00c9ff, #92fe9d);
+      color: #fff;
+      font-size: 18px;
+      font-weight: bold;
+      cursor: pointer;
+      transition: all 0.3s ease-in-out;
+    }
+
+    button:hover {
+      transform: scale(1.05);
+      box-shadow: 0 0 15px rgba(0, 201, 255, 0.6);
+    }
+
+    @media (max-width: 480px) {
+      .container {
+        padding: 30px 20px;
+      }
+
+      h1 {
+        font-size: 26px;
+      }
+    }
+
+    /* Dropdown Styles */
+    .dropdown-wrapper {
+      position: absolute;
+      top: 20px;
+      right: 30px;
+      z-index: 1000;
+    }
+
+    .dropdown-btn {
+      color: white;
+      cursor: pointer;
+      position: relative;
+    }
+
+    .dropdown-content {
+      display: none;
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 8px;
+      margin-top: 8px;
+      padding: 8px 12px;
+      color: white;
+      cursor: pointer;
+    }
+
+    .dropdown-content:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Hotel Owner Dropdown -->
+  <div class="dropdown-wrapper">
+    <div class="dropdown-btn" onclick="toggleDropdown()">
+      <i class="fa fa-user" style="margin-right: 6px;"></i>
+      {{ request.user.username }}
+      <i class="fa fa-caret-down" style="margin-left: 5px;"></i>
+    </div>
+    <div id="dropdown" class="dropdown-content" onclick="location.href='{% url 'edit_hotels' request.user.username%}'">
+      Edit Hotels
+    </div>
+  </div>
+
+  <script>
+    function toggleDropdown() {
+      var dropdown = document.getElementById("dropdown");
+      dropdown.style.display = dropdown.style.display === "block" ? "none" : "block";
+    }
+  </script>
+
+  <div class="container">
+    <h1>Register Your Hotel</h1>
+    <form method="POST" enctype="multipart/form-data">
+      {% csrf_token %}
+
+      <div class="form-group">
+        <i class="fa fa-hotel"></i>
+        <input type="text" name="{{ form.name.name }}" value="{{ form.name.value|default_if_none:'' }}" placeholder="Hotel Name" required id="id_name">
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-map-marker-alt"></i>
+        <input type="text" name="{{ form.location.name }}" value="{{ form.location.value|default_if_none:'' }}" placeholder="Location" required id="id_location">
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-dollar-sign"></i>
+        <input type="number" step="0.01" name="{{ form.price_per_night.name }}" value="{{ form.price_per_night.value|default_if_none:'' }}" placeholder="Price per Night" required id="id_price_per_night">
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-door-open"></i>
+        <input type="number" name="{{ form.number_of_rooms.name }}" value="{{ form.rooms_available.value|default_if_none:'' }}" placeholder="Number of Rooms Available" required id="id_rooms_available">
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-concierge-bell"></i>
+        <textarea name="{{ form.amenities.name }}" placeholder="Amenities" required id="id_amenities">{{ form.amenities.value|default_if_none:'' }}</textarea>
+      </div>
+
+      <div class="form-group">
+        <i class="fa fa-image"></i>
+        {{ form.image }}
+      </div>
+
+      <button type="submit">Submit</button>
+    </form>
+  </div>
+</body>
+</html>

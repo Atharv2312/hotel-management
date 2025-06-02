@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>My Bookings</title>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+      background: linear-gradient(135deg, #e0f7fa, #ffffff);
+      margin: 0;
+      padding: 0;
+    }
+
+    .my-bookings-container {
+      max-width: 900px;
+      margin: 60px auto;
+      padding: 40px;
+      background-color: #ffffff;
+      border-radius: 16px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+      animation: fadeIn 1s ease-in-out;
+    }
+
+    .my-bookings-header {
+      text-align: center;
+      color: #2c3e50;
+      font-size: 40px;
+      font-weight: 700;
+      margin-bottom: 40px;
+    }
+
+    .booking-card {
+      background-color: #fefefe;
+      padding: 25px;
+      margin-bottom: 25px;
+      border-left: 6px solid #3498db;
+      border-radius: 12px;
+      box-shadow: 0 6px 15px rgba(0, 0, 0, 0.05);
+      transition: transform 0.3s ease;
+    }
+
+    .booking-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .booking-content {
+      display: flex;
+      gap: 20px;
+      align-items: center;
+    }
+
+    .hotel-image {
+      width: 150px;
+      height: 100px;
+      border-radius: 10px;
+      object-fit: cover;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .hotel-name {
+      font-size: 26px;
+      color: #2c3e50;
+      margin-bottom: 12px;
+      font-weight: bold;
+    }
+
+    .check-in, .check-out {
+      font-size: 16px;
+      color: #555;
+      margin: 5px 0;
+    }
+
+    .check-in i, .check-out i {
+      margin-right: 8px;
+      color: #2980b9;
+    }
+
+    .cancel-form {
+      text-align: right;
+      margin-top: 15px;
+    }
+
+    .btn {
+      padding: 12px 22px;
+      background-color: #3498db;
+      color: white;
+      border: none;
+      border-radius: 8px;
+      cursor: pointer;
+      font-size: 16px;
+      transition: background-color 0.3s ease;
+    }
+
+    .btn-danger {
+      background-color: #e74c3c;
+    }
+
+    .btn-danger:hover {
+      background-color: #c0392b;
+    }
+
+    .btn:hover {
+      background-color: #2980b9;
+    }
+
+    p {
+      font-size: 18px;
+      text-align: center;
+      color: #777;
+      margin-top: 20px;
+    }
+
+    @keyframes fadeIn {
+      from {opacity: 0; transform: translateY(20px);}
+      to {opacity: 1; transform: translateY(0);}
+    }
+  </style>
+</head>
+<body>
+
+  <div class="my-bookings-container">
+    <h2 class="my-bookings-header">My Bookings</h2>
+    
+    {% for booking in bookings %}
+      {% if booking.booking_id %}
+      <div class="booking-card">
+        <div class="booking-content">
+          {% if booking.hotel.image %}
+            <img src="{{ booking.hotel.image.url }}" alt="{{ booking.hotel.name }}" class="hotel-image">
+          {% else %}
+            <img src="https://via.placeholder.com/150x100?text=No+Image" alt="No Image" class="hotel-image">
+          {% endif %}
+
+          <div style="flex-grow: 1;">
+            <h4 class="hotel-name">{{ booking.hotel.name }}</h4>
+            <p class="check-in"><i class="fa-solid fa-calendar-check"></i>Check-in: {{ booking.check_in }}</p>
+            <p class="check-out"><i class="fa-solid fa-calendar-xmark"></i>Check-out: {{ booking.check_out }}</p>
+          </div>
+        </div>
+
+        <form method="POST" action="{% url 'cancel_booking' booking.booking_id %}" class="cancel-form">
+          {% csrf_token %}
+          <button type="submit" class="btn btn-danger"><i class="fa-solid fa-ban"></i> Cancel Booking</button>
+        </form>
+      </div>
+      {% endif %}
+    {% empty %}
+      <p><i class="fa-solid fa-bed"></i> No bookings yet. Book your dream stay today!</p>
+    {% endfor %}
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Edit Hotels</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css">
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      background: linear-gradient(135deg, #2b5876, #4e4376);
+      color: white;
+    }
+
+    h1 {
+      text-align: center;
+      margin-bottom: 30px;
+    }
+
+    .hotel-card {
+      background: rgba(255, 255, 255, 0.08);
+      border-radius: 15px;
+      padding: 20px;
+      margin: 20px auto;
+      max-width: 600px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+    }
+
+    .hotel-card h2 {
+      margin: 0;
+      font-size: 22px;
+    }
+
+    .hotel-details {
+      margin-top: 10px;
+      font-size: 15px;
+      line-height: 1.6;
+    }
+
+    .edit-btn {
+      margin-top: 15px;
+      display: inline-block;
+      padding: 10px 16px;
+      background: #00c9ff;
+      border-radius: 8px;
+      text-decoration: none;
+      color: white;
+      font-weight: bold;
+      transition: background 0.3s ease-in-out;
+    }
+
+    .edit-btn:hover {
+      background: #00b4e6;
+    }
+
+    .back-btn {
+      display: inline-block;
+      margin: 20px;
+      color: #fff;
+      text-decoration: none;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 10px 16px;
+      border-radius: 8px;
+    }
+
+    .back-btn:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+  </style>
+</head>
+<body>
+
+  <a href="{% url 'register_hotel' %}" class="back-btn"><i class="fa fa-arrow-left"></i> Back to Register</a>
+
+  <h1>Your Registered Hotels</h1>
+
+  {% if hotels %}
+    {% for hotel in hotels %}
+        <div class="hotel-card">
+            <h2>{{ hotel.name }}</h2>
+            <div class="hotel-details">
+                <strong>Location:</strong> {{ hotel.location }}<br>
+                <strong>Price per Night:</strong> ₹{{ hotel.price_per_night }}<br>
+                <strong>Rooms Available:</strong> {{ hotel.number_of_rooms }}<br>
+                <strong>Verified:</strong> {{ hotel.is_verified|yesno:"Yes,No" }}<br>
+            </div>
+            <a href="{% url 'edit_specific_hotel' hotel.hotel_id%}" class="edit-btn"><i class="fa fa-edit"></i> Edit</a>
+        </div>
+    {% endfor %}
+{% else %}
+    <p style="text-align:center;">You haven't registered any hotels yet.</p>
+{% endif %}
+
+
+</body>
+</html>
